@@ -326,7 +326,10 @@ def _password_digest(username, password):
         raise TypeError("password must be an "
                         "instance of  %s" % (string_type.__name__,))
 
-    md5hash = hashlib.md5()
+    try:
+        md5hash = hashlib.md5(usedforsecurity=False)
+    except TypeError:
+        md5hash = hashlib.md5()
     data = "%s:mongo:%s" % (username, password)
     md5hash.update(data.encode('utf-8'))
     return _unicode(md5hash.hexdigest())
